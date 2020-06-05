@@ -45,6 +45,11 @@ MPICH_PTL_UNEX_EVENTS=160k
 KMP_STACKSIZE=2g
 F_UFMTENDIAN=big
 
+if [ $system_site = "stampede" ]; then
+  HDF5=${TACC_HDF5_DIR}
+  NETCDF=${TACC_NETCDF_DIR}
+fi
+
 if [ $system_site = "cray" ]; then
   HDF5=${HDF5_DIR}
   NETCDF=${NETCDF_DIR}

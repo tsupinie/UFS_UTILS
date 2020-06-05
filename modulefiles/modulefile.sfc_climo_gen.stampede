@@ -1,0 +1,17 @@
+#%Module#####################################################
+## Module file for sfc_climo_gen
+#############################################################
+
+module load intel/18.0.2
+module load impi/18.0.2
+module load hdf5/1.10.4
+module load netcdf/4.6.2
+
+export ESMF_DIR="/home1/01479/tsupine/esmf"
+export ESMF_F90COMPILEPATHS="-I${ESMF_DIR}/mod/modO/Linux.intel.64.intelmpi.default"
+export ESMF_F90LINKPATHS="-L${ESMF_DIR}/lib/libO/Linux.intel.64.intelmpi.default"
+export ESMF_F90LINKLIBS="-lesmf"
+export ESMFMKFILE="${ESMF_DIR}/lib/libO/Linux.intel.64.intelmpi.default/esmf.mk"
+
+export FCOMP=mpif90
+export FFLAGS="-O3 -fp-model=precise -g -traceback -r8 -i4 -convert big_endian"

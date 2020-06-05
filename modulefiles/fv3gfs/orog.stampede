@@ -1,0 +1,20 @@
+#%Module#####################################################
+## Module file for orog
+#############################################################
+# Loading Intel Compiler Suite
+#
+module purge
+
+module load intel/18.0.2
+module load hdf5/1.10.4
+module load netcdf/4.6.2
+
+# Loding nceplibs modules
+BASE_FV3="/home1/01479/tsupine/fv3-sar-devel/NCEPlibs"
+BASE_FV3_LIB="${BASE_FV3}/lib"
+
+export IP_LIBd="-L${BASE_FV3_LIB} -lip_d"
+export SP_LIBd="-L${BASE_FV3_LIB} -lsp_v2.0.2_d"
+export W3EMC_LIBd="-L${BASE_FV3_LIB} -lw3emc_d"
+export W3NCO_LIBd="-L${BASE_FV3_LIB} -lw3nco_d"
+export BACIO_LIB4="-L${BASE_FV3_LIB} -lbacio_4"

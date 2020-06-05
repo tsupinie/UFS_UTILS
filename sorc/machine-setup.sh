@@ -111,6 +111,8 @@ elif [[ -d /lustre && -d /ncrc ]] ; then
     module purge
 elif [[ "$(hostname)" =~ "odin" ]]; then
     target="odin"
+elif [[ "$(hostname)" =~ "stampede2" ]]; then
+    target="stampede"
 else
     echo WARNING: UNKNOWN PLATFORM 1>&2
 fi

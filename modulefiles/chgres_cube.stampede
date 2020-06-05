@@ -1,0 +1,72 @@
+#%Module#####################################################
+## chgres build module for stampede
+#############################################################
+
+# Loading Intel Compiler Suite
+module load intel/18.0.2
+module load impi/18.0.2
+
+#module use /oldscratch/ywang/external/modulefiles
+#module load esmf/8.0.0bs30
+
+#module load cray-netcdf-hdf5parallel
+#module load cray-parallel-netcdf
+#module load cray-hdf5-parallel
+#module load w3nco/v2.0.6
+#module load nemsio/v2.2.2
+#module load bacio/v2.0.2
+#module load sp/v2.0.2
+#module load sfcio/v1.0.0
+#module load sigio/v2.0.1
+
+
+# Loding nceplibs modules
+BASE_FV3="/home1/01479/tsupine/fv3-sar-devel/NCEPlibs"
+BASE_FV3_LIB="${BASE_FV3}/lib"
+BASE_FV3_INC="${BASE_FV3}/include"
+
+BASE_LOCAL="/home1/01479/tsupine/local"
+
+export GFSIO_LIB4="-L${BASE_LOCAL}/gfsio_4/lib -lgfsio_4"
+export NEMSIOGFS_LIB="-L${BASE_FV3_LIB} -lnemsiogfs_v2.0.1"
+export NEMSIO_LIB="-L${BASE_FV3_LIB} -lnemsio_d"
+export SIGIO_LIB4="-L${BASE_FV3_LIB} -lsigio_v2.0.1_4"
+export SFCIO_LIB4="-L${BASE_FV3_LIB} -lsfcio_v1.0.0_4"
+export LANDSFCUTIL_LIBd="-L${BASE_FV3_LIB} -llandsfcutil_v2.1.0_d"
+export IP_LIBd="-L${BASE_FV3_LIB} -lip_d"
+export SP_LIBd="-L${BASE_FV3_LIB} -lsp_v2.0.2_d"
+export W3EMC_LIBd="-L${BASE_FV3_LIB} -lw3emc_d"
+export W3NCO_LIBd="-L${BASE_FV3_LIB} -lw3nco_d"
+export BACIO_LIB4="-L${BASE_FV3_LIB} -lbacio_4"
+
+export SIGIO_INC4="${BASE_FV3_INC}"
+export SFCIO_INC4="${BASE_FV3_INC}"
+export LANDSFCUTIL_INCd="${BASE_FV3_INC}"
+export NEMSIO_INC="${BASE_FV3_INC}"
+export NEMSIOGFS_INC="${BASE_FV3_INC}"
+export GFSIO_INC4="${BASE_LOCAL}/gfsio_4/include"
+export IP_INCd="${BASE_FV3_INC}"
+
+export NETCDF_INCLUDE="-I${TACC_NETCDF_INC}"
+export NETCDF_LDFLAGS_F="-L${TACC_NETCDF_LIB} -lnetcdf -lnetcdff"
+
+export LDFLAGSM="-qopenmp -auto"
+export OMPFLAGM="-qopenmp -auto"
+
+export ESMF_DIR="/home1/01479/tsupine/esmf"
+export ESMF_BUILD='O'
+export ESMF_F90COMPILEPATHS="-I${ESMF_DIR}/mod/mod${ESMF_BUILD}/Linux.intel.64.intelmpi.default"
+export ESMF_F90LINKPATHS="-L${ESMF_DIR}/lib/lib${ESMF_BUILD}/Linux.intel.64.intelmpi.default"
+export ESMF_F90LINKLIBS="-lesmf"
+export ESMFMKFILE="${ESMF_DIR}/lib/lib${ESMF_BUILD}/Linux.intel.64.intelmpi.default/esmf.mk"
+
+FFLAGS_DEBUG="-O0 -check arg_temp_created,bounds,format,output_conversion,stack,uninit -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
+FFLAGS_OPT="-O3 -fp-model precise -g -traceback -r8 -i4 -qopenmp -convert big_endian -assume byterecl"
+export FFLAGS=$FFLAGS_OPT
+
+WGRIB2_DIR="/home1/01479/tsupine/grib2"
+export WGRIB2API_LIB="${WGRIB2_DIR}/lib/libwgrib2_api.a"
+export WGRIB2API_INC="${WGRIB2_DIR}/lib"
+export WGRIB2_LIB="${WGRIB2_DIR}/lib/libwgrib2.a"
+
+export FCOMP=mpif90

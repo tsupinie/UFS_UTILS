@@ -16,27 +16,30 @@ cd $HOMEufs/ush
 
 export CRES=768
 
-export CDATE=${CDATE:-2020042800}
+export CDATE=${CDATE:-2020060600}
 CYCLE=`echo $CDATE | cut -c 9-10`
 
-export INPUT_TYPE='grib2'
-export CONVERT_NST=".false."
+INPUT_DIR=/scratch/01479/tsupine/extm
+
 if [ $MEMBER == 'gfs' ]; then
-    export COMIN=/scratch/01479/tsupine/extm/gfs/gfs.$CDATE
-    export GRIB2_FILE_BASE=gfs.t${CYCLE}z.pgrb2.0p25.f0
+    export INPUT_TYPE='grib2_gfs'
+    INPUT_NAME=gfs193grb2
     LBC_DT=6
 elif [ $MEMBER == 'nam' ]; then
-    export COMIN=/scratch/01479/tsupine/extm/nam12grb2/nam12grb2.$CDATE
-    export GRIB2_FILE_BASE=nam12grb2.${CDATE}f
+    export INPUT_TYPE='grib2_nam'
+    INPUT_NAME=nam12grb2
     LBC_DT=3
 else
-    export COMIN=/scratch/01479/tsupine/extm/gefs/gefs.$CDATE
-    export GRIB2_FILE_BASE=$MEMBER.t${CYCLE}z.pgrb2f
+    export INPUT_TYPE='grib2_gfs'
+    INPUT_NAME=gefs3grb2_${MEMBER}
     LBC_DT=6
 fi
     
+export COMIN=$INPUT_DIR/$INPUT_NAME/$INPUT_NAME.$CDATE
+GRIB2_FILE_BASE=$INPUT_NAME.${CDATE}f
 export HALO_BNDY=4
 export HALO_BLEND=8
+export CONVERT_NST=".false."
 
 export VARMAP_FILE=$HOMEufs/parm/varmap_tables/GFSphys_var_map.txt
 export OROG_FILES_TARGET_GRID="C${CRES}_oro_data.tile7.halo4.nc"
@@ -54,14 +57,14 @@ nprocs_per_fcst=24
 
 for ((ifcst=0;ifcst<=$nfcst;ifcst++)); do
     export APRUN="ibrun -n $nprocs_per_fcst -o $((ifcst * nprocs_per_fcst))"
-    ifhr=`printf "%02d" $((ifcst * LBC_DT))`
+    ifhr=`printf "%03d" $((ifcst * LBC_DT))`
 
     export GRIB2_FILE_INPUT=$GRIB2_FILE_BASE$ifhr
 
     export DATA=$OUT_PATH/f$ifhr
     mkdir $DATA
 
-    if [ $ifhr == 00 ]; then
+    if [ $ifhr == 000 ]; then
         export REGIONAL=1
     else
         export REGIONAL=2
@@ -70,7 +73,7 @@ for ((ifcst=0;ifcst<=$nfcst;ifcst++)); do
     (./chgres_cube.sh > $DATA/chgres_cube.out) &
 
     ln -s f$ifhr/gfs.bndy.nc $OUT_PATH/gfs_bndy.tile7.0$ifhr.nc
-    if [ $ifhr == 00 ]; then
+    if [ $ifhr == 000 ]; then
         ln -s f${ifhr}/gfs_ctrl.nc $OUT_PATH/.
         ln -s f${ifhr}/out.atm.tile1.nc $OUT_PATH/gfs_data.nc
         ln -s f${ifhr}/out.sfc.tile1.nc $OUT_PATH/sfc_data.nc
